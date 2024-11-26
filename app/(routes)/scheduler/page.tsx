@@ -41,7 +41,7 @@ export default function SchedulerPage() {
           mode="single"
           selected={date}
           onSelect={setDate}
-          className="flex justify-center rounded-md  bg-blue-100/30 p-4"
+          className="flex justify-center rounded-3xl  bg-blue-100/30 p-4"
         />
 
         <div>
