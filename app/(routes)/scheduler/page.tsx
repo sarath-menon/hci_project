@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Calendar as CalendarIcon, Film, Plus } from "lucide-react";
 import EventCard from "@/components/EventCard";
+import { Header } from "@/components/Header";
+import PageLayout from "@/components/page-layout";
 
 export default function SchedulerPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -19,31 +21,35 @@ export default function SchedulerPage() {
   ];
 
   return (
-    <div className="px-4 pt-4 pb-24 w-full">
-      <Calendar
-        mode="single"
-        selected={date}
-        onSelect={setDate}
-        className="flex justify-center rounded-md scale-125 mt-10"
-      />
+    <div className="flex flex-col ">
+      <Header heading="Scheduler" />
 
-      <div className="mt-16">
-        <div className="flex justify-center items-center mb-6">
-          <Button variant="secondary" size="sm">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Event
-          </Button>
+      <PageLayout>
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          className="flex justify-center rounded-md "
+        />
+
+        <div className="mt-16">
+          <div className="flex justify-center items-center mb-6">
+            <Button variant="secondary" size="sm">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Event
+            </Button>
+          </div>
+
+          {events.map((event, index) => (
+            <EventCard
+              key={index}
+              title={event.title}
+              time={event.time}
+              icon={event.icon}
+            />
+          ))}
         </div>
-
-        {events.map((event, index) => (
-          <EventCard
-            key={index}
-            title={event.title}
-            time={event.time}
-            icon={event.icon}
-          />
-        ))}
-      </div>
+      </PageLayout>
     </div>
   );
 }

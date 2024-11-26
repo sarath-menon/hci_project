@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon, Phone, Calendar } from "lucide-react";
+import PageLayout from "@/components/page-layout";
+import { Header } from "@/components/Header";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#E5F6F8]">
-      {/* Main Content */}
-      <main className="px-4 py-8">
+    <div className="flex flex-col bg-[#E5F6F8]">
+      <Header heading="Home" />
+      <PageLayout>
         <h1 className="text-5xl font-bold text-[#7CD7E6] mb-8">Home</h1>
 
         <Alert className="mb-6 bg-[#FFF8E7] border-[#FFF8E7]">
@@ -33,7 +35,7 @@ export default function HomePage() {
             Schedule a call with gf❤️
           </Button>
         </div>
-      </main>
+      </PageLayout>
     </div>
   );
 }
