@@ -3,14 +3,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon, Phone, Calendar } from "lucide-react";
 import PageLayout from "@/components/page-layout";
 import { Header } from "@/components/Header";
+import { StatusList } from "@/components/status-list";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col bg-[#E5F6F8]">
+    <div className="flex flex-col ">
       <Header heading="Home" />
-      <PageLayout>
-        <h1 className="text-5xl font-bold text-[#7CD7E6] mb-8">Home</h1>
-
+      <PageLayout className="space-y-8">
         <Alert className="mb-6 bg-[#FFF8E7] border-[#FFF8E7]">
           <InfoIcon className="h-5 w-5" />
           <AlertDescription>
@@ -19,22 +18,18 @@ export default function HomePage() {
         </Alert>
 
         <div className="space-y-4">
-          <Button
-            className="w-full justify-start gap-2 bg-white text-black hover:bg-gray-100"
-            variant="outline"
-          >
+          <Button className="w-full gap-2 " variant="default">
             <Phone className="h-5 w-5" />
-            Call gf❤️
+            Call gf
           </Button>
 
-          <Button
-            className="w-full justify-start gap-2 bg-white text-black hover:bg-gray-100"
-            variant="outline"
-          >
+          <Button className="w-full gap-2 text-black" variant="secondary">
             <Calendar className="h-5 w-5" />
-            Schedule a call with gf❤️
+            Schedule a call with gf
           </Button>
         </div>
+
+        <StatusList />
       </PageLayout>
     </div>
   );

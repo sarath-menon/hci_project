@@ -17,7 +17,7 @@ export default function ProfilePage() {
       <PageLayout>
         <div className="flex justify-center">
           <Avatar className="w-32 h-32">
-            <AvatarImage src="/path-to-your-image.jpg" alt="Profile picture" />
+            <AvatarImage src="/avatar.png" alt="Profile picture" />
             <AvatarFallback>AI</AvatarFallback>
           </Avatar>
         </div>
