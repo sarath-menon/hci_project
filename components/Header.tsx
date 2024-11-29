@@ -18,7 +18,7 @@ export function Header({ heading }: HeaderProps) {
   }
 
   return (
-    <header className="min-w-screen flex justify-between items-center p-4 bg-green-500">
+    <header className=" min-w-screen flex justify-between items-center p-4 bg-green-500">
       {pathname !== "/home" && (
         <Button
           variant="ghost"

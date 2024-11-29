@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Home, Phone, Calendar, BarChart } from "lucide-react";
+import { Home, Phone, Calendar, BarChart, Contact } from "lucide-react";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { href: "/", icon: Home, label: "Home" },
-  { href: "/call", icon: Phone, label: "Call" },
+  { href: "/contacts", icon: Contact, label: "Contact" },
   { href: "/scheduler", icon: Calendar, label: "Scheduler" },
   { href: "/stats", icon: BarChart, label: "Stats" },
 ];
