@@ -32,10 +32,10 @@ export default function ProfilePage() {
                 <SelectValue placeholder="Select your mood" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="happy">Happy</SelectItem>
-                <SelectItem value="focused">Focused</SelectItem>
-                <SelectItem value="tired">Tired</SelectItem>
-                <SelectItem value="energetic">Energetic</SelectItem>
+                <SelectItem value="happy">😊 Happy</SelectItem>
+                <SelectItem value="focused">🎯 Focused</SelectItem>
+                <SelectItem value="tired">😴 Tired</SelectItem>
+                <SelectItem value="energetic">⚡ Energetic</SelectItem>
               </SelectContent>
             </Select>
           </div>
