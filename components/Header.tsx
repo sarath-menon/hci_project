@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface HeaderProps {
   heading: string;
@@ -11,6 +11,7 @@ interface HeaderProps {
 
 export function Header({ heading }: HeaderProps) {
   const router = useRouter();
+  const pathname = usePathname();
 
   function handleBack() {
     router.back();
@@ -18,14 +19,16 @@ export function Header({ heading }: HeaderProps) {
 
   return (
     <header className="min-w-screen flex justify-between items-center p-4 bg-green-500">
-      <Button
-        variant="ghost"
-        size="icon"
-        className="hover:bg-green-600"
-        onClick={handleBack}
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </Button>
+      {pathname !== "/home" && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hover:bg-green-600"
+          onClick={handleBack}
+        >
+          {pathname !== "/" ? <ChevronLeft className="h-5 w-5" /> : null}
+        </Button>
+      )}
 
       <span className="text-white text-lg font-semibold">{heading}</span>
 
