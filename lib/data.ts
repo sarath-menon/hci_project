@@ -17,4 +17,38 @@ const contactsData: Contact[] = [
   { id: '9', name: 'Emma Johnson', initial: 'E', category: 'friends' }
 ];
 
-export { contactsData as contacts, type Contact };
+interface Event {
+  id: string;
+  title: string;
+  time: string;
+}
+
+const sampleEvents: Event[] = [
+  {
+    id: '1',
+    title: 'Virtual Movie Date',
+    time: '19:30-22:30',
+  },
+  {
+    id: '2',
+    title: 'Video Call Dinner',
+    time: '18:00-20:00',
+  },
+  {
+    id: '3',
+    title: 'Morning Coffee Chat',
+    time: '10:00-11:00',
+  },
+  {
+    id: '4',
+    title: 'Gaming Session Together',
+    time: '14:30-16:30',
+  },
+  {
+    id: '5',
+    title: 'Virtual Date Night',
+    time: '20:00-22:00',
+  }
+];
+
+export { contactsData as contacts, sampleEvents, type Contact, type Event };

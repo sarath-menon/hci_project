@@ -20,6 +20,7 @@ import { useState } from "react";
 
 interface EventFormProps {
   onSubmit: (data: EventFormData) => void;
+  initialDate?: Date;
 }
 
 export interface EventFormData {
@@ -28,25 +29,23 @@ export interface EventFormData {
   date: string;
 }
 
-function EventForm({ onSubmit }: EventFormProps) {
+function EventForm({ onSubmit, initialDate }: EventFormProps) {
   const [open, setOpen] = useState(false);
 
   const form = useForm<EventFormData>({
     defaultValues: {
       title: "",
       time: "",
-      date: new Date().toISOString().split("T")[0],
+      date: initialDate
+        ? initialDate.toISOString().split("T")[0]
+        : new Date().toISOString().split("T")[0],
     },
   });
 
   function handleSubmit(data: EventFormData) {
     onSubmit(data);
     setOpen(false);
-    form.reset({
-      title: "",
-      time: "",
-      date: new Date().toISOString().split("T")[0],
-    });
+    form.reset();
   }
 
   return (

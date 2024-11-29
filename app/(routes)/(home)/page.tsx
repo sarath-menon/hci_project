@@ -20,12 +20,12 @@ export default function HomePage() {
         <div className="space-y-4">
           <Button className="w-full gap-2 " variant="default">
             <Phone className="h-5 w-5" />
-            Call gf
+            Call
           </Button>
 
           <Button className="w-full gap-2 text-black" variant="secondary">
             <Calendar className="h-5 w-5" />
-            Schedule a call with gf
+            Schedule a call
           </Button>
         </div>
 

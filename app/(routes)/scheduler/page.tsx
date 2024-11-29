@@ -1,35 +1,44 @@
 "use client";
 
 import { Calendar } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Film, Plus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Film } from "lucide-react";
 import EventCard from "@/components/EventCard";
 import { Header } from "@/components/Header";
 import PageLayout from "@/components/page-layout";
 import EventForm, { EventFormData } from "@/components/EventForm";
+import { sampleEvents, type Event } from "@/lib/data";
+
+function getRandomEvents(allEvents: Event[], count: number = 2): Event[] {
+  const shuffled = [...allEvents].sort(function () {
+    return 0.5 - Math.random();
+  });
+  return shuffled.slice(0, count);
+}
 
 export default function SchedulerPage() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [events, setEvents] = useState([
-    {
-      date: new Date(2024, 2, 29),
-      title: "Movie Night",
-      time: "19:30-22:30",
-      icon: <Film className="h-5 w-5" />,
+  const [date, setDate] = useState<Date>(new Date());
+  const [displayedEvents, setDisplayedEvents] = useState<Event[]>([]);
+
+  useEffect(
+    function updateDisplayedEvents() {
+      if (!date) return;
+      const randomEvents = getRandomEvents(sampleEvents);
+      setDisplayedEvents(randomEvents);
     },
-  ]);
+    [date]
+  );
 
   function handleAddEvent(data: EventFormData) {
-    setEvents([
-      ...events,
-      {
-        date: new Date(data.date),
-        title: data.title,
-        time: data.time,
-        icon: <Film className="h-5 w-5" />,
-      },
-    ]);
+    const newEvent = {
+      id: String(sampleEvents.length + 1),
+      title: data.title,
+      time: data.time,
+    };
+
+    sampleEvents.push(newEvent);
+    const randomEvents = getRandomEvents(sampleEvents);
+    setDisplayedEvents(randomEvents);
   }
 
   return (
@@ -40,23 +49,34 @@ export default function SchedulerPage() {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
-          className="flex justify-center rounded-3xl  bg-blue-100/30 p-4"
+          onSelect={function handleSelect(newDate: Date | undefined) {
+            if (newDate) setDate(newDate);
+          }}
+          disabled={function disablePastDates(date: Date) {
+            return date < new Date();
+          }}
+          className="flex justify-center rounded-3xl bg-blue-100/30 p-4"
         />
 
         <div>
           <div className="flex justify-center items-center mb-6">
-            <EventForm onSubmit={handleAddEvent} />
+            <EventForm onSubmit={handleAddEvent} initialDate={date} />
           </div>
 
-          {events.map((event, index) => (
-            <EventCard
-              key={index}
-              title={event.title}
-              time={event.time}
-              icon={event.icon}
-            />
-          ))}
+          {displayedEvents.length === 0 && (
+            <p className="text-center text-gray-500">No events for this date</p>
+          )}
+
+          {displayedEvents.map(function renderEvent(event) {
+            return (
+              <EventCard
+                key={event.id}
+                title={event.title}
+                time={event.time}
+                icon={<Film className="h-5 w-5" />}
+              />
+            );
+          })}
         </div>
       </PageLayout>
     </div>
