@@ -51,4 +51,49 @@ const sampleEvents: Event[] = [
   }
 ];
 
-export { contactsData as contacts, sampleEvents, type Contact, type Event };
+interface MonthlyCallRatio {
+  month: string;
+  gf: number;
+  airam: number;
+}
+
+const monthlyCallRatios: MonthlyCallRatio[] = [
+  { month: "January", gf: 48, airam: 32 },
+  { month: "February", gf: 55, airam: 45 },
+  { month: "March", gf: 42, airam: 38 },
+  { month: "April", gf: 51, airam: 29 },
+  { month: "May", gf: 37, airam: 43 },
+  { month: "June", gf: 59, airam: 31 },
+  { month: "July", gf: 44, airam: 36 },
+  { month: "August", gf: 53, airam: 47 },
+  { month: "September", gf: 41, airam: 39 },
+  { month: "October", gf: 46, airam: 34 },
+];
+
+function getCallRatioForDateRange(startDate: Date, endDate: Date): { gf: number; airam: number } {
+  const start = startDate.getMonth();
+  const end = endDate.getMonth();
+  
+  const monthRange = end >= start 
+    ? monthlyCallRatios.slice(start, end + 1)
+    : monthlyCallRatios;
+  
+  if (monthRange.length === 0) {
+    return { gf: 0, airam: 0 };
+  }
+
+  const totalGf = monthRange.reduce((sum, month) => sum + month.gf, 0);
+  const totalAiram = monthRange.reduce((sum, month) => sum + month.airam, 0);
+  
+  return { gf: totalGf, airam: totalAiram };
+}
+
+export { 
+  contactsData as contacts, 
+  sampleEvents, 
+  monthlyCallRatios,
+  getCallRatioForDateRange,
+  type Contact, 
+  type Event, 
+  type MonthlyCallRatio 
+};
