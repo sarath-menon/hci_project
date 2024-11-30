@@ -17,6 +17,7 @@ import {
 import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import posthog from "posthog-js";
 
 interface EventFormProps {
   onSubmit: (data: EventFormData) => void;
@@ -31,6 +32,7 @@ export interface EventFormData {
 
 function EventForm({ onSubmit, initialDate }: EventFormProps) {
   const [open, setOpen] = useState(false);
+  const [startTime, setStartTime] = useState<number | null>(null);
 
   const form = useForm<EventFormData>({
     defaultValues: {
@@ -42,14 +44,30 @@ function EventForm({ onSubmit, initialDate }: EventFormProps) {
     },
   });
 
+  function handleDrawerOpen(isOpen: boolean) {
+    setOpen(isOpen);
+    if (isOpen) {
+      setStartTime(Date.now());
+      posthog.capture("event_form_opened");
+    }
+  }
+
   function handleSubmit(data: EventFormData) {
+    if (startTime) {
+      const duration = Date.now() - startTime;
+      posthog.capture("event_created", {
+        duration_ms: duration,
+        event_title: data.title,
+      });
+    }
     onSubmit(data);
     setOpen(false);
     form.reset();
+    setStartTime(null);
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer open={open} onOpenChange={handleDrawerOpen}>
       <DrawerTrigger asChild>
         <Button variant="secondary" size="sm">
           <Plus className="h-4 w-4 mr-2" />
@@ -105,7 +123,7 @@ function EventForm({ onSubmit, initialDate }: EventFormProps) {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
+              <Button id="create-event-button" type="submit" className="w-full">
                 Create Event
               </Button>
             </form>

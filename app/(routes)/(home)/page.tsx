@@ -7,30 +7,27 @@ import PageLayout from "@/components/page-layout";
 import { Header } from "@/components/Header";
 import { StatusList } from "@/components/status-list";
 import Link from "next/link";
-import { usePostHog, useFeatureFlagEnabled } from "posthog-js/react";
+import {
+  usePostHog,
+  useFeatureFlagEnabled,
+  useFeatureFlagVariantKey,
+} from "posthog-js/react";
 import { toast } from "sonner";
 
 export default function HomePage() {
-  const posthog = usePostHog();
+  // const posthog = usePostHog();
 
-  const isCallFlagEnabled = useFeatureFlagEnabled("call-button-home");
+  // const isCallFlagEnabled = useFeatureFlagVariantKey("call-button-home");
+
+  const isCallFlagEnabled = true;
 
   console.log("isCallFlagEnabled", isCallFlagEnabled);
-
-  console.log(
-    "posthog.getFeatureFlag",
-    posthog.getFeatureFlag("call-button-home")
-  );
-
-  const isCallFlagEnabled_ = posthog.getFeatureFlag("call-button-home");
-
-  console.log("isCallFlagEnabled_", isCallFlagEnabled_);
 
   const callURL = `/call?name=${encodeURIComponent("gf❤️")}`;
 
   if (isCallFlagEnabled) {
-    toast("Event has been created", {
-      description: ", it's your turn to call gf❤️ today!",
+    toast("Hey Airam", {
+      description: ", It's your turn to call gf❤️ today!",
       action: {
         label: "Call",
         onClick: function () {
@@ -56,7 +53,7 @@ export default function HomePage() {
             <div className="flex flex-col gap-4">
               <Link href={callURL}>
                 <Button
-                  id="call-button-home"
+                  id="call-button-control"
                   className="w-full gap-2 "
                   variant="default"
                 >
@@ -67,7 +64,7 @@ export default function HomePage() {
 
               {/* <Link href="/scheduler">
                 <Button
-                  id="scheduler-button-home"
+                  id="scheduler-button-control"
                   // onClick={() => posthog.capture("$schedule_call")}
                   className="w-full gap-2 text-black"
                   variant="secondary"

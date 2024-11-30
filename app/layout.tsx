@@ -39,7 +39,7 @@ export default function RootLayout({
           <div className="fixed bottom-0 w-full">
             <BottomNav />
           </div>
-          <Toaster />
+          <Toaster position="top-right" />
         </body>
       </PHProvider>
     </html>
