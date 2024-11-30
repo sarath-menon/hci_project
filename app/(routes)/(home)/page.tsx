@@ -4,6 +4,7 @@ import { InfoIcon, Phone, Calendar } from "lucide-react";
 import PageLayout from "@/components/page-layout";
 import { Header } from "@/components/Header";
 import { StatusList } from "@/components/status-list";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -17,16 +18,20 @@ export default function HomePage() {
           </AlertDescription>
         </Alert>
 
-        <div className="space-y-4">
-          <Button className="w-full gap-2 " variant="default">
-            <Phone className="h-5 w-5" />
-            Call
-          </Button>
+        <div className="flex flex-col gap-4">
+          <Link href="/contacts">
+            <Button className="w-full gap-2 " variant="default">
+              <Phone className="h-5 w-5" />
+              Call
+            </Button>
+          </Link>
 
-          <Button className="w-full gap-2 text-black" variant="secondary">
-            <Calendar className="h-5 w-5" />
-            Schedule a call
-          </Button>
+          <Link href="/scheduler">
+            <Button className="w-full gap-2 text-black" variant="secondary">
+              <Calendar className="h-5 w-5" />
+              Schedule a call
+            </Button>
+          </Link>
         </div>
 
         <StatusList />
