@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { BottomNav } from "@/components/BottomNav";
 import { Header } from "@/components/Header";
+import { PHProvider } from "./providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,16 +29,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
-      >
-        {/* <Header /> */}
-        <main className="flex-1 ">{children}</main>
+      <PHProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+        >
+          {/* <Header /> */}
+          <main className="flex-1 ">{children}</main>
 
-        <div className="fixed bottom-0 w-full">
-          <BottomNav />
-        </div>
-      </body>
+          <div className="fixed bottom-0 w-full">
+            <BottomNav />
+          </div>
+          <Toaster />
+        </body>
+      </PHProvider>
     </html>
   );
 }
