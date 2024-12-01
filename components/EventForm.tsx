@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Form,
   FormControl,
@@ -19,12 +20,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import posthog from "posthog-js";
 import {
-  usePostHog,
-  useFeatureFlagEnabled,
-  useFeatureFlagVariantKey,
-} from "posthog-js/react";
-import { toast } from "sonner";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -32,10 +27,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { eventTypes, timeSlots } from "@/lib/data";
+import {
+  usePostHog,
+  useFeatureFlagEnabled,
+  useFeatureFlagVariantKey,
+} from "posthog-js/react";
 
 interface EventFormProps {
   onSubmit: (data: EventFormData) => void;
-  initialDate?: Date;
 }
 
 export interface EventFormData {
@@ -46,12 +45,11 @@ export interface EventFormData {
   };
 }
 
-function EventForm({ onSubmit, initialDate }: EventFormProps) {
+function EventForm({ onSubmit }: EventFormProps) {
   const [open, setOpen] = useState(false);
   const [startTime, setStartTime] = useState<null | number>(null);
-  // const isVariantB = useFeatureFlagVariantKey("new-event-dialog");
 
-  const isVariantB = false;
+  const isVariantB = useFeatureFlagVariantKey("new-event-dialog");
 
   const form = useForm<EventFormData>({
     defaultValues: {
@@ -141,43 +139,81 @@ function EventForm({ onSubmit, initialDate }: EventFormProps) {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time (1 hour slots)</FormLabel>
-                    <FormControl>
-                      {isVariantB ? (
-                        <Select
-                          value={`${field.value.start}-${field.value.end}`}
-                          onValueChange={(value) => {
-                            const selectedSlot = timeSlots.find(
-                              (slot) => `${slot.start}-${slot.end}` === value
-                            );
-                            if (selectedSlot) {
-                              field.onChange({
-                                start: selectedSlot.start,
-                                end: selectedSlot.end,
-                              });
-                            }
-                          }}
-                        >
-                          <SelectTrigger className="w-[240px]">
-                            <SelectValue placeholder="Select time slot" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {timeSlots.map(function renderTimeSlot(slot) {
-                              return (
-                                <SelectItem
-                                  key={slot.id}
-                                  value={`${slot.start}-${slot.end}`}
-                                >
-                                  {slot.label}
-                                </SelectItem>
+                    <div className="space-y-2">
+                      <FormControl>
+                        {isVariantB ? (
+                          <Select
+                            value={`${field.value.start}-${field.value.end}`}
+                            onValueChange={(value) => {
+                              const selectedSlot = timeSlots.find(
+                                (slot) => `${slot.start}-${slot.end}` === value
                               );
-                            })}
-                          </SelectContent>
-                        </Select>
-                      ) : (
-                        <Input {...field} type="time" />
-                      )}
-                    </FormControl>
+                              if (selectedSlot) {
+                                field.onChange({
+                                  start: selectedSlot.start,
+                                  end: selectedSlot.end,
+                                });
+                              }
+                            }}
+                          >
+                            <SelectTrigger className="w-[240px]">
+                              <SelectValue placeholder="Select time slot" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {timeSlots.map(function renderTimeSlot(slot) {
+                                return (
+                                  <SelectItem
+                                    key={slot.id}
+                                    value={`${slot.start}-${slot.end}`}
+                                  >
+                                    {slot.label}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <div className="flex flex-col gap-2">
+                            <div className="flex flex-col w-full space-y-2">
+                              <div className="flex flex-col w-full">
+                                <Label className="mb-2 text-sm font-medium">
+                                  Start Time
+                                </Label>
+                                <Input
+                                  type="time"
+                                  value={field.value.start}
+                                  onChange={(e) =>
+                                    field.onChange({
+                                      ...field.value,
+                                      start: e.target.value,
+                                    })
+                                  }
+                                  className="w-full"
+                                  placeholder="Start Time"
+                                />
+                              </div>
+                              <div className="flex flex-col w-full">
+                                <Label className="mb-2 text-sm font-medium">
+                                  End Time
+                                </Label>
+                                <Input
+                                  type="time"
+                                  value={field.value.end}
+                                  onChange={(e) =>
+                                    field.onChange({
+                                      ...field.value,
+                                      end: e.target.value,
+                                    })
+                                  }
+                                  className="w-full"
+                                  placeholder="End Time"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </FormControl>
+                    </div>
                   </FormItem>
                 )}
               />
@@ -185,9 +221,7 @@ function EventForm({ onSubmit, initialDate }: EventFormProps) {
                 id="create-event-button"
                 type="submit"
                 className={`w-full ${
-                  isVariantB
-                    ? "bg-primary hover:bg-primary/90 text-lg py-6"
-                    : ""
+                  false ? "bg-primary hover:bg-primary/90 text-lg py-6" : ""
                 }`}
               >
                 Create Event

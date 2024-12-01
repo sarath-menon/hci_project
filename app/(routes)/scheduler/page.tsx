@@ -2,7 +2,6 @@
 
 import { Calendar } from "@/components/ui/calendar";
 import { useState, useEffect } from "react";
-import { Film } from "lucide-react";
 import EventCard from "@/components/EventCard";
 import { Header } from "@/components/Header";
 import PageLayout from "@/components/page-layout";
@@ -52,11 +51,12 @@ export default function SchedulerPage() {
 
   function handleAddEvent(data: EventFormData) {
     const startDate = new Date(date);
-    const [hours, minutes] = data.time.split(":");
+    const [hours, minutes] = data.time.start.split(":");
     startDate.setHours(parseInt(hours), parseInt(minutes));
 
-    const endDate = new Date(startDate);
-    endDate.setHours(startDate.getHours() + 2);
+    const endDate = new Date(date);
+    const [endHours, endMinutes] = data.time.end.split(":");
+    endDate.setHours(parseInt(endHours), parseInt(endMinutes));
 
     const selectedEventType = eventTypes.find(function findEventType(type) {
       return type.id === data.eventTypeId;
@@ -97,7 +97,7 @@ export default function SchedulerPage() {
 
         <div>
           <div className="flex justify-center items-center mb-6">
-            <EventForm onSubmit={handleAddEvent} initialDate={date} />
+            <EventForm onSubmit={handleAddEvent} />
           </div>
 
           {displayedEvents.length === 0 && (
@@ -105,15 +105,14 @@ export default function SchedulerPage() {
           )}
 
           {displayedEvents.map(function renderEvent(event) {
-            const Icon = event.eventType.icon;
-            const startTime = format(new Date(event.time.start), "HH:mm");
-            const endTime = format(new Date(event.time.end), "HH:mm");
+            const startTime = format(new Date(event.time.start), "hh:mm a");
+            const endTime = format(new Date(event.time.end), "hh:mm a");
 
             return (
               <EventCard
                 key={event.id}
                 title={`${event.eventType.emoji} ${event.eventType.label}`}
-                time={`${startTime}-${endTime}`}
+                time={`${startTime} - ${endTime}`}
               />
             );
           })}
