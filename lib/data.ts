@@ -1,3 +1,11 @@
+import { 
+  Film, 
+  Popcorn, 
+  Coffee, 
+  Gamepad, 
+  Heart 
+} from "lucide-react";
+
 interface Contact {
   id: string;
   name: string;
@@ -17,37 +25,119 @@ const contactsData: Contact[] = [
   { id: '9', name: 'Emma Johnson', initial: 'E', category: 'friends' }
 ];
 
+export type EventType = {
+  id: string;
+  label: string;
+  emoji: string;
+  icon: typeof Film | typeof Popcorn | typeof Coffee | typeof Gamepad | typeof Heart;
+};
+
+export const eventTypes: EventType[] = [
+  {
+    id: 'movie',
+    label: 'Movie Night',
+    emoji: '🎬',
+    icon: Film
+  },
+  {
+    id: 'dinner',
+    label: 'Virtual Dinner',
+    emoji: '🍽️',
+    icon: Popcorn
+  },
+  {
+    id: 'coffee',
+    label: 'Coffee Chat',
+    emoji: '☕',
+    icon: Coffee
+  },
+  {
+    id: 'gaming',
+    label: 'Gaming Session',
+    emoji: '🎮',
+    icon: Gamepad
+  },
+  {
+    id: 'date',
+    label: 'Virtual Date',
+    emoji: '❤️',
+    icon: Heart
+  }
+];
+
 interface Event {
   id: string;
-  title: string;
-  time: string;
+  eventType: EventType;
+  time: {
+    start: string;
+    end: string;
+  };
 }
 
 const sampleEvents: Event[] = [
   {
     id: '1',
-    title: 'Virtual Movie Date',
-    time: '19:30-22:30',
+    eventType: eventTypes[0],
+    time: {
+      start: '2024-03-20T19:30:00Z',
+      end: '2024-03-20T22:30:00Z'
+    }
   },
   {
     id: '2',
-    title: 'Video Call Dinner',
-    time: '18:00-20:00',
+    eventType: eventTypes[1],
+    time: {
+      start: '2024-03-20T18:00:00Z',
+      end: '2024-03-20T20:00:00Z'
+    }
   },
   {
     id: '3',
-    title: 'Morning Coffee Chat',
-    time: '10:00-11:00',
+    eventType: eventTypes[2],
+    time: {
+      start: '2024-03-20T10:00:00Z',
+      end: '2024-03-20T11:00:00Z'
+    }
   },
   {
     id: '4',
-    title: 'Gaming Session Together',
-    time: '14:30-16:30',
+    eventType: eventTypes[3],
+    time: {
+      start: '2024-03-20T14:30:00Z',
+      end: '2024-03-20T16:30:00Z'
+    }
   },
   {
     id: '5',
-    title: 'Virtual Date Night',
-    time: '20:00-22:00',
+    eventType: eventTypes[4],
+    time: {
+      start: '2024-03-20T20:00:00Z',
+      end: '2024-03-20T22:00:00Z'
+    }
+  },
+  {
+    id: '6',
+    eventType: eventTypes[0],
+    time: {
+      start: '2024-03-21T15:00:00Z',
+      end: '2024-03-21T19:00:00Z'
+    }
+  },
+  {
+    id: '7',
+    eventType: eventTypes[2],
+    time: {
+      start: '2024-03-21T09:00:00Z',
+      end: '2024-03-21T10:30:00Z'
+    }
+  },
+  {
+    id: '8',
+    eventType: eventTypes[3],
+    time: {
+      start: '2024-03-21T20:00:00Z',
+      end: '2024-03-21T23:00:00Z'
+    }
   }
 ];
 
@@ -88,11 +178,94 @@ function getCallRatioForDateRange(startDate: Date, endDate: Date): { gf: number;
   return { gf: totalGf, airam: totalAiram };
 }
 
+export interface TimeSlot {
+  id: string;
+  label: string;
+  start: string;
+  end: string;
+}
+
+export const timeSlots: TimeSlot[] = [
+  { 
+    id: '1', 
+    label: '9:00 AM - 10:00 AM', 
+    start: '09:00',
+    end: '10:00'
+  },
+  { 
+    id: '2', 
+    label: '10:00 AM - 11:00 AM', 
+    start: '10:00',
+    end: '11:00'
+  },
+  { 
+    id: '3', 
+    label: '11:00 AM - 12:00 PM', 
+    start: '11:00',
+    end: '12:00'
+  },
+  { 
+    id: '4', 
+    label: '12:00 PM - 1:00 PM', 
+    start: '12:00',
+    end: '13:00'
+  },
+  { 
+    id: '5', 
+    label: '1:00 PM - 2:00 PM', 
+    start: '13:00',
+    end: '14:00'
+  },
+  { 
+    id: '6', 
+    label: '2:00 PM - 3:00 PM', 
+    start: '14:00',
+    end: '15:00'
+  },
+  { 
+    id: '7', 
+    label: '3:00 PM - 4:00 PM', 
+    start: '15:00',
+    end: '16:00'
+  },
+  { 
+    id: '8', 
+    label: '4:00 PM - 5:00 PM', 
+    start: '16:00',
+    end: '17:00'
+  },
+  { 
+    id: '9', 
+    label: '5:00 PM - 6:00 PM', 
+    start: '17:00',
+    end: '18:00'
+  },
+  { 
+    id: '10', 
+    label: '6:00 PM - 7:00 PM', 
+    start: '18:00',
+    end: '19:00'
+  },
+  { 
+    id: '11', 
+    label: '7:00 PM - 8:00 PM', 
+    start: '19:00',
+    end: '20:00'
+  },
+  { 
+    id: '12', 
+    label: '8:00 PM - 9:00 PM', 
+    start: '20:00',
+    end: '21:00'
+  }
+];
+
 export { 
   contactsData as contacts, 
   sampleEvents, 
   monthlyCallRatios,
   getCallRatioForDateRange,
+  timeSlots,
   type Contact, 
   type Event, 
   type MonthlyCallRatio 

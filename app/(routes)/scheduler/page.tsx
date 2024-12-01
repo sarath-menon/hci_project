@@ -7,13 +7,32 @@ import EventCard from "@/components/EventCard";
 import { Header } from "@/components/Header";
 import PageLayout from "@/components/page-layout";
 import EventForm, { EventFormData } from "@/components/EventForm";
-import { sampleEvents, type Event } from "@/lib/data";
+import { sampleEvents, type Event, eventTypes } from "@/lib/data";
+import { format } from "date-fns";
 
-function getRandomEvents(allEvents: Event[], count: number = 2): Event[] {
-  const shuffled = [...allEvents].sort(function () {
+function getRandomEvents(
+  allEvents: Event[],
+  selectedDate: Date,
+  count: number = 2
+): Event[] {
+  const eventsForDate = allEvents.filter(function (event) {
+    const eventDate = new Date(event.time.start);
+    return (
+      eventDate.getDate() === selectedDate.getDate() &&
+      eventDate.getMonth() === selectedDate.getMonth() &&
+      eventDate.getFullYear() === selectedDate.getFullYear()
+    );
+  });
+
+  const shuffled = [...eventsForDate].sort(function () {
     return 0.5 - Math.random();
   });
-  return shuffled.slice(0, count);
+
+  const selectedEvents = shuffled.slice(0, count);
+
+  return selectedEvents.sort(function (a, b) {
+    return new Date(a.time.start).getTime() - new Date(b.time.start).getTime();
+  });
 }
 
 export default function SchedulerPage() {
@@ -22,22 +41,40 @@ export default function SchedulerPage() {
 
   useEffect(
     function updateDisplayedEvents() {
+      console.log("date", date);
       if (!date) return;
-      const randomEvents = getRandomEvents(sampleEvents);
+      const randomEvents = getRandomEvents(sampleEvents, date);
+      console.log("randomEvents", randomEvents);
       setDisplayedEvents(randomEvents);
     },
     [date]
   );
 
   function handleAddEvent(data: EventFormData) {
+    const startDate = new Date(date);
+    const [hours, minutes] = data.time.split(":");
+    startDate.setHours(parseInt(hours), parseInt(minutes));
+
+    const endDate = new Date(startDate);
+    endDate.setHours(startDate.getHours() + 2);
+
+    const selectedEventType = eventTypes.find(function findEventType(type) {
+      return type.id === data.eventTypeId;
+    });
+
+    if (!selectedEventType) return;
+
     const newEvent = {
       id: String(sampleEvents.length + 1),
-      title: data.title,
-      time: data.time,
+      eventType: selectedEventType,
+      time: {
+        start: startDate.toISOString(),
+        end: endDate.toISOString(),
+      },
     };
 
     sampleEvents.push(newEvent);
-    const randomEvents = getRandomEvents(sampleEvents);
+    const randomEvents = getRandomEvents(sampleEvents, date);
     setDisplayedEvents(randomEvents);
   }
 
@@ -68,12 +105,15 @@ export default function SchedulerPage() {
           )}
 
           {displayedEvents.map(function renderEvent(event) {
+            const Icon = event.eventType.icon;
+            const startTime = format(new Date(event.time.start), "HH:mm");
+            const endTime = format(new Date(event.time.end), "HH:mm");
+
             return (
               <EventCard
                 key={event.id}
-                title={event.title}
-                time={event.time}
-                icon={<Film className="h-5 w-5" />}
+                title={`${event.eventType.emoji} ${event.eventType.label}`}
+                time={`${startTime}-${endTime}`}
               />
             );
           })}

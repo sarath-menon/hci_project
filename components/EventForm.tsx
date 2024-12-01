@@ -24,6 +24,14 @@ import {
   useFeatureFlagVariantKey,
 } from "posthog-js/react";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { eventTypes, timeSlots } from "@/lib/data";
 
 interface EventFormProps {
   onSubmit: (data: EventFormData) => void;
@@ -31,26 +39,27 @@ interface EventFormProps {
 }
 
 export interface EventFormData {
-  title: string;
-  time: string;
-  date: string;
+  eventTypeId: string;
+  time: {
+    start: string;
+    end: string;
+  };
 }
 
 function EventForm({ onSubmit, initialDate }: EventFormProps) {
   const [open, setOpen] = useState(false);
   const [startTime, setStartTime] = useState<null | number>(null);
-
   const isVariantB = useFeatureFlagVariantKey("new-event-dialog");
 
   console.log("isVariantB", isVariantB);
 
   const form = useForm<EventFormData>({
     defaultValues: {
-      title: "",
-      time: "",
-      date: initialDate
-        ? initialDate.toISOString().split("T")[0]
-        : new Date().toISOString().split("T")[0],
+      eventTypeId: eventTypes[0].id,
+      time: {
+        start: "",
+        end: "",
+      },
     },
   });
 
@@ -67,7 +76,7 @@ function EventForm({ onSubmit, initialDate }: EventFormProps) {
       const duration = Date.now() - startTime;
       posthog.capture("event_created", {
         duration_ms: duration,
-        event_title: data.title,
+        event_title: data.eventTypeId,
       });
     }
     onSubmit(data);
@@ -96,47 +105,82 @@ function EventForm({ onSubmit, initialDate }: EventFormProps) {
             >
               <FormField
                 control={form.control}
-                name="title"
+                name="eventTypeId"
                 rules={{ required: true }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Event Title</FormLabel>
+                    <FormLabel>Event Type</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Movie Night" />
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="w-[240px]">
+                          <SelectValue placeholder="Select event type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {eventTypes.map(function renderEventType(type) {
+                            return (
+                              <SelectItem key={type.id} value={type.id}>
+                                <span className="flex items-center gap-2">
+                                  <span>{type.emoji}</span>
+                                  <span>{type.label}</span>
+                                </span>
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                   </FormItem>
                 )}
               />
-              <div
-                className={isVariantB ? "grid grid-cols-2 gap-4" : "space-y-4"}
-              >
-                <FormField
-                  control={form.control}
-                  name="time"
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Time</FormLabel>
-                      <FormControl>
+              <FormField
+                control={form.control}
+                name="time"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Time</FormLabel>
+                    <FormControl>
+                      {isVariantB ? (
+                        <Select
+                          value={`${field.value.start}-${field.value.end}`}
+                          onValueChange={(value) => {
+                            const selectedSlot = timeSlots.find(
+                              (slot) => `${slot.start}-${slot.end}` === value
+                            );
+                            if (selectedSlot) {
+                              field.onChange({
+                                start: selectedSlot.start,
+                                end: selectedSlot.end,
+                              });
+                            }
+                          }}
+                        >
+                          <SelectTrigger className="w-[240px]">
+                            <SelectValue placeholder="Select time slot" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {timeSlots.map(function renderTimeSlot(slot) {
+                              return (
+                                <SelectItem
+                                  key={slot.id}
+                                  value={`${slot.start}-${slot.end}`}
+                                >
+                                  {slot.label}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                      ) : (
                         <Input {...field} type="time" />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="date"
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Date</FormLabel>
-                      <FormControl>
-                        <Input {...field} type="date" />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
+                      )}
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
               <Button
                 id="create-event-button"
                 type="submit"
