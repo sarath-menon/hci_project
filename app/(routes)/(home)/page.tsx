@@ -15,13 +15,8 @@ import {
 import { toast } from "sonner";
 
 export default function HomePage() {
-  // const posthog = usePostHog();
-
-  // const isCallFlagEnabled = useFeatureFlagVariantKey("call-button-home");
-
-  const isCallFlagEnabled = true;
-
-  console.log("isCallFlagEnabled", isCallFlagEnabled);
+  // const posthog = usePostHog();x
+  const isCallFlagEnabled = useFeatureFlagVariantKey("call-button-home");
 
   const callURL = `/call?name=${encodeURIComponent("gf❤️")}`;
 

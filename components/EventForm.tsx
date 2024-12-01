@@ -49,9 +49,9 @@ export interface EventFormData {
 function EventForm({ onSubmit, initialDate }: EventFormProps) {
   const [open, setOpen] = useState(false);
   const [startTime, setStartTime] = useState<null | number>(null);
-  const isVariantB = useFeatureFlagVariantKey("new-event-dialog");
+  // const isVariantB = useFeatureFlagVariantKey("new-event-dialog");
 
-  console.log("isVariantB", isVariantB);
+  const isVariantB = false;
 
   const form = useForm<EventFormData>({
     defaultValues: {
