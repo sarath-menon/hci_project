@@ -185,7 +185,7 @@ export interface TimeSlot {
   end: string;
 }
 
-export const timeSlots: TimeSlot[] = [
+const timeSlots: TimeSlot[] = [
   { 
     id: '1', 
     label: '9:00 AM - 10:00 AM', 
