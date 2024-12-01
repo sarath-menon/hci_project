@@ -18,6 +18,12 @@ import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import posthog from "posthog-js";
+import {
+  usePostHog,
+  useFeatureFlagEnabled,
+  useFeatureFlagVariantKey,
+} from "posthog-js/react";
+import { toast } from "sonner";
 
 interface EventFormProps {
   onSubmit: (data: EventFormData) => void;
@@ -32,7 +38,11 @@ export interface EventFormData {
 
 function EventForm({ onSubmit, initialDate }: EventFormProps) {
   const [open, setOpen] = useState(false);
-  const [startTime, setStartTime] = useState<number | null>(null);
+  const [startTime, setStartTime] = useState<null | number>(null);
+
+  const isVariantB = useFeatureFlagVariantKey("new-event-dialog");
+
+  console.log("isVariantB", isVariantB);
 
   const form = useForm<EventFormData>({
     defaultValues: {
@@ -97,33 +107,45 @@ function EventForm({ onSubmit, initialDate }: EventFormProps) {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="time"
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Time</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="time" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="date"
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="date" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <Button id="create-event-button" type="submit" className="w-full">
+              <div
+                className={isVariantB ? "grid grid-cols-2 gap-4" : "space-y-4"}
+              >
+                <FormField
+                  control={form.control}
+                  name="time"
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Time</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="time" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="date"
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Date</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="date" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button
+                id="create-event-button"
+                type="submit"
+                className={`w-full ${
+                  isVariantB
+                    ? "bg-primary hover:bg-primary/90 text-lg py-6"
+                    : ""
+                }`}
+              >
                 Create Event
               </Button>
             </form>
