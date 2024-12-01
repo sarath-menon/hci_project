@@ -141,7 +141,7 @@ function EventForm({ onSubmit, initialDate }: EventFormProps) {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Time (1 hour slots)</FormLabel>
                     <FormControl>
                       {isVariantB ? (
                         <Select
