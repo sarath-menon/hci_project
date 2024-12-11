@@ -65,9 +65,56 @@ export const eventTypes: EventType[] = [
   }
 ];
 
+export type Person = {
+  id: string;
+  name: string;
+  relation: string;
+  bgColor: string;
+};
+
+export const persons: Person[] = [
+  { 
+    id: 'gf', 
+    name: 'Sarah', 
+    relation: 'Girlfriend',
+    bgColor: '#FF6B6B'
+  },
+  { 
+    id: 'mom', 
+    name: 'Mom', 
+    relation: 'Mother',
+    bgColor: '#4D96FF'
+  },
+  { 
+    id: 'dad', 
+    name: 'Dad', 
+    relation: 'Father',
+    bgColor: '#6BCB77'
+  },
+  { 
+    id: 'friend1', 
+    name: 'John', 
+    relation: 'Friend',
+    bgColor: '#9B72AA'
+  },
+  { 
+    id: 'friend2', 
+    name: 'Emma', 
+    relation: 'Friend',
+    bgColor: '#9B72AA'
+  },
+  { 
+    id: 'sister', 
+    name: 'Lucy', 
+    relation: 'Sister',
+    bgColor: '#34BE82'
+  }
+];
+
 interface Event {
   id: string;
   eventType: EventType;
+  person: Person;
   time: {
     start: string;
     end: string;
@@ -78,6 +125,7 @@ const sampleEvents: Event[] = [
   {
     id: '1',
     eventType: eventTypes[0],
+    person: persons[0],
     time: {
       start: '2024-03-20T19:30:00Z',
       end: '2024-03-20T22:30:00Z'
@@ -86,6 +134,7 @@ const sampleEvents: Event[] = [
   {
     id: '2',
     eventType: eventTypes[1],
+    person: persons[1],
     time: {
       start: '2024-03-20T18:00:00Z',
       end: '2024-03-20T20:00:00Z'
@@ -94,6 +143,7 @@ const sampleEvents: Event[] = [
   {
     id: '3',
     eventType: eventTypes[2],
+    person: persons[2],
     time: {
       start: '2024-03-20T10:00:00Z',
       end: '2024-03-20T11:00:00Z'
@@ -102,6 +152,7 @@ const sampleEvents: Event[] = [
   {
     id: '4',
     eventType: eventTypes[3],
+    person: persons[3],
     time: {
       start: '2024-03-20T14:30:00Z',
       end: '2024-03-20T16:30:00Z'
@@ -110,6 +161,7 @@ const sampleEvents: Event[] = [
   {
     id: '5',
     eventType: eventTypes[4],
+    person: persons[4],
     time: {
       start: '2024-03-20T20:00:00Z',
       end: '2024-03-20T22:00:00Z'
@@ -118,6 +170,7 @@ const sampleEvents: Event[] = [
   {
     id: '6',
     eventType: eventTypes[0],
+    person: persons[5],
     time: {
       start: '2024-03-21T15:00:00Z',
       end: '2024-03-21T19:00:00Z'
@@ -126,6 +179,7 @@ const sampleEvents: Event[] = [
   {
     id: '7',
     eventType: eventTypes[2],
+    person: persons[6],
     time: {
       start: '2024-03-21T09:00:00Z',
       end: '2024-03-21T10:30:00Z'
@@ -134,6 +188,7 @@ const sampleEvents: Event[] = [
   {
     id: '8',
     eventType: eventTypes[3],
+    person: persons[7],
     time: {
       start: '2024-03-21T20:00:00Z',
       end: '2024-03-21T23:00:00Z'

@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { eventTypes, timeSlots } from "@/lib/data";
+import { eventTypes, timeSlots, persons } from "@/lib/data";
 import {
   usePostHog,
   useFeatureFlagEnabled,
@@ -39,6 +39,7 @@ interface EventFormProps {
 
 export interface EventFormData {
   eventTypeId: string;
+  personId: string;
   time: {
     start: string;
     end: string;
@@ -54,6 +55,7 @@ function EventForm({ onSubmit }: EventFormProps) {
   const form = useForm<EventFormData>({
     defaultValues: {
       eventTypeId: eventTypes[0].id,
+      personId: persons[0].id,
       time: {
         start: "",
         end: "",
@@ -86,9 +88,8 @@ function EventForm({ onSubmit }: EventFormProps) {
   return (
     <Drawer open={open} onOpenChange={handleDrawerOpen}>
       <DrawerTrigger asChild>
-        <Button variant="secondary" size="sm">
-          <Plus className="h-4 w-4 mr-2" />
-          Add Event
+        <Button size="icon" variant="secondary">
+          <Plus className="h-4 w-4 rounded-full" />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -123,6 +124,44 @@ function EventForm({ onSubmit }: EventFormProps) {
                                 <span className="flex items-center gap-2">
                                   <span>{type.emoji}</span>
                                   <span>{type.label}</span>
+                                </span>
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="personId"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Person</FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="w-[240px]">
+                          <SelectValue placeholder="Select person" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {persons.map(function renderPerson(person) {
+                            return (
+                              <SelectItem key={person.id} value={person.id}>
+                                <span className="flex items-center gap-2">
+                                  <div
+                                    className="w-4 h-4 rounded-full"
+                                    style={{ backgroundColor: person.bgColor }}
+                                  />
+                                  <span>{person.name}</span>
+                                  <span className="text-muted-foreground">
+                                    ({person.relation})
+                                  </span>
                                 </span>
                               </SelectItem>
                             );
