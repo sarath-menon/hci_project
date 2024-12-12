@@ -50,7 +50,9 @@ function EventForm({ onSubmit }: EventFormProps) {
   const [open, setOpen] = useState(false);
   const [startTime, setStartTime] = useState<null | number>(null);
 
-  const isVariantB = useFeatureFlagVariantKey("new-event-dialog");
+  // const isVariantB = useFeatureFlagVariantKey("new-event-dialog");
+
+  const isVariantB = true;
 
   const form = useForm<EventFormData>({
     defaultValues: {
